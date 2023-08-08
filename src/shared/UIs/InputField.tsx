@@ -46,17 +46,17 @@ export const SearchInput = ({ onChange, inputValue, onKeyDown }: IProps) => {
     )
 }
 
-export const InputField = ({ type, name, onChange, disabled, inputValue, placeholder, title, }: IProps) => {
+export const InputField = ({ type, name, onChange, disabled, inputValue, placeholder, title, className }: IProps) => {
     return (
         <div className="flex flex-col gap-2 ">
             {
                 title && (<span className='font-medium text-[14px] leading-[22px] '>{title}</span>)
             }
-            <Input
+            <input
                 name={name}
                 type={type}
                 placeholder={placeholder}
-                className={` border-1 h-[40px] rounded-md placeholder:text-sm focus:outline-none`}
+                className={`border-[2px] h-[42px] p-1 rounded-md placeholder:text-sm focus:outline-none ${className}`}
                 onChange={onChange}
                 value={inputValue}
                 disabled={disabled}
