@@ -84,7 +84,7 @@ export const baseQueryWithoutAdminWithInterceptor: BaseQueryFn<
   // Check if the response has a status code of 401
   if (result.error?.status === 401 || result.error?.originalStatus === 401) {
     sessionStorage.removeItem("authToken");
-    window.location.href = "/notAuthorized";
+    window.location.href = "/";
 
   }
   if (result.error?.status === 403 || result.error?.originalStatus === 403) {
