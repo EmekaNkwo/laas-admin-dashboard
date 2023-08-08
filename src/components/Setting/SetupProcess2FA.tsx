@@ -1,11 +1,12 @@
-import { FilledButton } from '@/shared/UIs/CustomButton'
+import { FilledButton, OutlineButton } from '@/shared/UIs/CustomButton'
 import React from 'react'
 
 interface IProps {
     next: () => void
+    setOpenModal: (value: boolean) => void
 }
 
-const SetupProcess2FA = ({ next }: IProps) => {
+const SetupProcess2FA = ({ next, setOpenModal }: IProps) => {
     return (
         <div className='px-1 flex flex-col  gap-2'>
             <span className='text-[20px] font-semibold'>Instructions</span>
@@ -16,7 +17,10 @@ const SetupProcess2FA = ({ next }: IProps) => {
             </ul>
             <div className="flex items-center justify-between">
                 <span className='text-[16px] font-semibold'>Click next to Proceed</span>
-                <FilledButton title='Next' onClick={next} className='bg-mainColor text-[#fff] ' />
+                <div className="flex items-center gap-2">
+                    <FilledButton title='Next' onClick={next} className='bg-mainColor text-[#fff] ' />
+                    <OutlineButton title='Close' onClick={() => setOpenModal(false)} className='border-red-500 text-red-500 ' />
+                </div>
             </div>
         </div>
     )

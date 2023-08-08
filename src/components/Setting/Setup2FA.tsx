@@ -29,12 +29,12 @@ const Setup2FA = ({ isModalOpen, setOpenModal }: IModalProps) => {
         {
             title: 'Setup 2FA',
             content: <>
-                <SetupProcess2FA next={next} />
+                <SetupProcess2FA next={next} setOpenModal={setOpenModal} />
             </>,
         },
         {
             title: 'Authenticate 2FA',
-            content: <><Authenticate2FA current={current} prev={prev} next={next} /></>,
+            content: <><Authenticate2FA current={current} prev={prev} next={next} setOpenModal={setOpenModal} /></>,
         },
         {
             title: 'Completed 2FA',
@@ -44,8 +44,10 @@ const Setup2FA = ({ isModalOpen, setOpenModal }: IModalProps) => {
     const items = steps.map((item) => ({ key: item.title, title: item.title }));
     return (
 
-        <Modal title="" open={isModalOpen} onOk={() => setOpenModal(false)}
-            onCancel={() => setOpenModal(false)} cancelButtonProps={{
+        <Modal title="" open={isModalOpen}
+            onOk={() => setOpenModal(false)}
+            // onCancel={() => setOpenModal(false)} 
+            cancelButtonProps={{
                 style: {
                     display: "none"
                 }

@@ -22,7 +22,6 @@ const Login = (): ReactElement => {
 			console.error(err);
 		}
 	};
-
 	useEffect(() => {
 		if (isSuccess) {
 			notification.success({
@@ -30,16 +29,21 @@ const Login = (): ReactElement => {
 				duration: 3,
 				placement: "topRight",
 			});
-			sessionStorage.setItem('authToken', data?.data?.token);
 			setEmail('');
 			setPassword('');
-			navigate('/dashboard');
+			if (data?.data?.twoFactorEnabled) {
+				sessionStorage.setItem('email', email);
+				navigate('/2fa')
+			} else {
+				sessionStorage.setItem('authToken', data?.data?.token);
+				navigate('/dashboard');
+			}
 		}
 	}, [isSuccess, navigate]);
 
 	useEffect(() => {
 		if (error) {
-			const errorMesg = (error as any).data?.error;
+			const errorMesg = (error as any)?.data?.error;
 			notification.error({
 				message: errorMesg,
 				duration: 3,
@@ -54,12 +58,10 @@ const Login = (): ReactElement => {
 
 	return (
 		<>
-			<div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-
+			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 				<form onSubmit={submitForm} className='flex flex-col w-full justify-center gap-3'>
 					<InputField className='w-[350px]' name='email' type='email' title='Email' inputValue={email} onChange={(e) => setEmail(e.target.value)} />
 					<PassowrdField className='w-[350px]' name='password' title='Password' inputValue={password} onChange={(e) => setPassword(e.target.value)} />
-
 					{
 						isLoading ? (
 							<Spin />) : (
@@ -68,8 +70,6 @@ const Login = (): ReactElement => {
 						)
 					}
 				</form>
-
-
 			</div>
 		</>
 	);

@@ -1,28 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useSetup2FAQuery, useVerify2FAMutation } from '@/services/Api/twoApi'
+import { useEnable2FAMutation, useSetup2FAQuery, useVerify2FAMutation } from '@/services/Api/twoApi'
 import { OutlineButton } from '@/shared/UIs/CustomButton';
 import { InputField } from '@/shared/UIs/InputField';
 import { Image, message } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { Spinner } from '../Spinner';
-import { useProfileQuery } from '@/services/Api/api';
+
 
 interface IProps {
     current: number
     prev: () => void
     next: () => void
+    setOpenModal: (value: boolean) => void
 }
 
-const Authenticate2FA = ({ current, prev, next }: IProps) => {
-    const { data: userData } = useProfileQuery({})
+const Authenticate2FA = ({ current, prev, next, setOpenModal }: IProps) => {
     const { data, isSuccess, isError, isLoading } = useSetup2FAQuery({})
     const [code, setCode] = useState('')
     const [qrCodeGenerated, setQrCodeGenerated] = useState(false);
-    const [verify2FA, { isSuccess: verifySuccess, isError: verifyIsError, error: verifyError, isLoading: verifyIsLoading }] = useVerify2FAMutation()
+    const [enable2FA, { isSuccess: verifySuccess, isError: verifyIsError, error: verifyError, isLoading: verifyIsLoading }] = useEnable2FAMutation()
 
     const handleVerification = async () => {
-        await verify2FA({
-            email: userData?.email,
+        await enable2FA({
+            secret: data?.data?.secret,
             token: code
         })
     }
@@ -35,7 +35,7 @@ const Authenticate2FA = ({ current, prev, next }: IProps) => {
             setQrCodeGenerated(true);
         }
         if (verifySuccess) {
-            message.success('Verification Successful')
+            message.success('2FA Enabled Successfully')
             next()
         }
         if (verifyIsError) {
@@ -72,10 +72,12 @@ const Authenticate2FA = ({ current, prev, next }: IProps) => {
                     </>
                 )}
             </div>
-            <div className="mt-2">
+            <div className="mt-2 flex items-center gap-2">
                 {current > 0 && (
                     <OutlineButton title='Go Back' onClick={prev} />
                 )}
+                <OutlineButton title='Close' onClick={() => setOpenModal(false)} className='border-red-500 text-red-500 ' />
+
             </div></>
     )
 }
